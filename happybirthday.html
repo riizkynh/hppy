@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selamat Ulang Tahun, Lintang💕</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #000;
+        text-align: center;
+        overflow-x: hidden;
+        overflow-y: auto;
+        min-height: 100vh;
+      }
+
+      /* === VIDEO BACKGROUND === */
+      #bg-video {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        z-index: -2;
+        filter: brightness(0.5);
+      }
+
+      #container {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+        width: 90%;
+        max-width: 600px;
+        margin: 100px auto;
+        animation: fadeIn 2s ease;
+        z-index: 2;
+        position: relative;
+      }
+
+      #message {
+        color: #fff;
+        font-size: 1.1em;
+        line-height: 1.6;
+        text-shadow: 1px 1px 4px #ff69b4;
+        text-align: justify;
+      }
+
+      #nextBtn {
+        background-color: #ff69b4;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: 0.3s;
+      }
+      #nextBtn:hover {
+        background-color: #ff1493;
+        transform: scale(1.05);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* === BALLOONS === */
+      .balloon {
+        position: fixed;
+        bottom: -150px;
+        width: 70px;
+        height: 90px;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: floatUp 10s ease-in forwards;
+        z-index: 0;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-110vh);
+          opacity: 0;
+        }
+      }
+
+      /* === CONFETTI === */
+      .confetti {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        background-color: gold;
+        top: 0;
+        animation: fall 5s linear infinite;
+        z-index: 0;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+        }
+      }
+
+      audio {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- VIDEO BACKGROUND -->
+    <video id="bg-video" autoplay muted loop playsinline>
+      <source
+        src="WhatsApp Video 2025-10-22 at 04.09.15_4b9cab9f.mp4"
+        type="video/mp4"
+      />
+      Browser kamu tidak mendukung video.
+    </video>
+
+    <div id="container">
+      <div id="message"></div>
+      <button id="nextBtn">💌 Lanjutkan 💌</button>
+    </div>
+
+    <audio id="bgm" loop>
+      <source src="A Thousand Years.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+      const messages = [
+        "Hai kamu... iya, kamu yang lagi ulang tahun hari ini 🥰",
+        "Selamat ulang tahun, Lintang Noor Ramadhanti 💖",
+        "Hari ini spesial banget, karena dunia pernah dikasih hadiah seindah kamu 🎁",
+        "Aku cuma mau bilang, kamu hebat banget. Bisa sampai sejauh ini dengan segala tantangan yang kamu hadapi 💪",
+        "Tapi serius, aku bangga banget sama kamu 🤍",
+        "Kadang capek itu wajar, tapi jangan lupa kamu udah sejauh ini, jangan menyerah ya 🌸",
+        "Nikmatin prosesnya, percaya aja, semua kerja keras kamu bakal terbayar nanti 🌈",
+        "Dan Hari ini waktunya kamu bahagia 🥳",
+        "Selamat ulang tahun cintaku 💕 Semoga semua hal baik datang padamu tanpa kamu minta.",
+        "Aku selalu di sini, dukung kamu dalam setiap langkahmu 🤗",
+        "Semoga hari-harimu ke depan penuh cinta, tawa, dan kebahagiaan yang tak terhingga 🌟",
+        "Sekali lagi, selamat ulang tahun, Sayang! 🎉🎂🎈",
+        "Terakhir, aku mau ngucapin terima kasih karena udah jadi kamu yang luar biasa ini. Aku sayang banget sama kamu 😘",
+      ];
+
+      let index = 0;
+      const messageEl = document.getElementById("message");
+      const btn = document.getElementById("nextBtn");
+      const bgm = document.getElementById("bgm");
+
+      // === MAIN AUDIO LOOP LOCAL ===
+      bgm.play().catch(() => {
+        // Autoplay biasanya diblok di browser, jadi tunggu interaksi
+        document.body.addEventListener("click", () => bgm.play(), {
+          once: true,
+        });
+      });
+
+      btn.addEventListener("click", showNextMessage);
+
+      function typeWriter(text, i, callback) {
+        if (i < text.length) {
+          messageEl.innerHTML = text.substring(0, i + 1);
+          setTimeout(() => typeWriter(text, i + 1, callback), 40);
+        } else {
+          if (callback) callback();
+        }
+      }
+
+      function showNextMessage() {
+        btn.disabled = true;
+        if (index < messages.length) {
+          typeWriter(messages[index], 0, () => {
+            btn.disabled = false;
+            index++;
+            if (index === messages.length) btn.innerText = "🎁 Lanjutkan 🎁";
+          });
+        } else {
+          startCelebration();
+        }
+      }
+
+      function startCelebration() {
+        btn.style.display = "none";
+        messageEl.innerHTML = `
+          <h2>🎂 Selamat Ulang Tahun, Lintang Noor Ramadhanti 🎂</h2>
+          <p>Hari ini spesial, bukan hanya karena kamu bertambah usia, tapi juga karena dunia punya alasan lagi untuk bersyukur atas kehadiranmu.  
+          Aku merasa beruntung bisa mengenalmu dan berjalan sejauh ini bersamamu.</p>
+          <p>Di setiap hal yang kamu lakukan, aku selalu lihat ketulusan dan usaha yang nyata.  
+          Kamu bukan hanya sosok yang sabar, tapi juga kuat — terutama sekarang, saat kamu sedang berjuang menyusun bab 1 sampai 3 skripsimu.  
+          Aku tahu itu tidak mudah, tapi aku percaya kamu bisa.</p>
+          <p>Di usiamu yang baru ini, aku berdoa semoga kamu selalu diberi kesehatan, ketenangan hati, dan jalan yang dimudahkan untuk meraih semua yang kamu impikan.  
+          Semoga setiap langkahmu dipenuhi keberkahan dan setiap harimu membawa hal-hal baik yang kamu pantas dapatkan.</p>
+          <p>Terima kasih sudah jadi seseorang yang tulus dan penuh perhatian.  
+          Terima kasih sudah membuat hari-hariku terasa lebih tenang dan berarti.</p>
+          <p>Semoga tahun ini membawa lebih banyak kebahagiaan, pengalaman baru, dan pencapaian yang kamu banggakan.  
+          Tetaplah jadi Lintang yang sederhana, lembut, tapi kuat seperti yang aku kenal. Sehat selalu, panjang umur, gaboleh ngeyel gaboleh nakal ya, semangatt terus, semoga selalu dilancarkan dan dimudahkan dalam segala hal.</p>
+          <p>Selamat ulang tahun sekali lagi.  
+          Semoga kamu selalu dikelilingi orang-orang baik dan doa-doa yang tulus.  
+          Aku selalu dukung kamu, dalam setiap langkah dan perjuanganmu. 🤍</p>
+        `;
+
+        generateConfetti();
+        continuousBalloons();
+      }
+
+      // === efek balon muncul terus ===
+      function continuousBalloons() {
+        generateBalloons();
+        setInterval(generateBalloons, 2500);
+      }
+
+      function generateBalloons() {
+        const colors = ["#ff69b4", "#ffd700", "#87cefa", "#98fb98", "#ffa07a"];
+        for (let i = 0; i < 6; i++) {
+          let balloon = document.createElement("div");
+          balloon.className = "balloon";
+          balloon.style.left = Math.random() * 100 + "vw";
+          balloon.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          balloon.style.animationDuration = 10 + Math.random() * 5 + "s";
+          document.body.appendChild(balloon);
+          setTimeout(() => balloon.remove(), 15000);
+        }
+      }
+
+      function generateConfetti() {
+        const colors = ["#ffb6c1", "#ff69b4", "#ffd700", "#fff", "#87cefa"];
+        for (let i = 0; i < 80; i++) {
+          let c = document.createElement("div");
+          c.className = "confetti";
+          c.style.left = Math.random() * 100 + "vw";
+          c.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          c.style.animationDuration = 3 + Math.random() * 3 + "s";
+          c.style.width = c.style.height = Math.random() * 10 + "px";
+          document.body.appendChild(c);
+          setTimeout(() => c.remove(), 6000);
+        }
+      }
+
+      showNextMessage();
+    </script>
+  </body>
+</html>
